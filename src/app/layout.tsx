@@ -10,7 +10,7 @@ const syne = Syne({
 
 const dmSans = DM_Sans({
   variable: "--vyud-font-body",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 

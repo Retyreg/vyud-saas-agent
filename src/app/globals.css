@@ -1,42 +1,54 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-vyud-primary-50: #EEF6FF;
+  --color-vyud-primary-100: #DBEEFF;
+  --color-vyud-primary-200: #BADdff;
+  --color-vyud-primary-300: #7EC4FF;
+  --color-vyud-primary-400: #399FFF;
+  --color-vyud-primary-500: #0D7EFF;
+  --color-vyud-primary-600: #0062E0;
+  --color-vyud-primary-700: #004DB5;
+  --color-vyud-primary-800: #003D94;
+  --color-vyud-primary-900: #002F72;
+
+  --color-vyud-neutral-0: #FFFFFF;
+  --color-vyud-neutral-50: #F7F9FC;
+  --color-vyud-neutral-100: #EEF2F7;
+  --color-vyud-neutral-200: #DDE4EF;
+  --color-vyud-neutral-300: #C4CFDF;
+  --color-vyud-neutral-400: #9AAABF;
+  --color-vyud-neutral-500: #6B809A;
+  --color-vyud-neutral-600: #4A5F78;
+  --color-vyud-neutral-700: #324159;
+  --color-vyud-neutral-800: #1E2D40;
+  --color-vyud-neutral-900: #0D1926;
+  --color-vyud-neutral-950: #070E18;
+
+  --font-display: var(--vyud-font-display), system-ui, sans-serif;
+  --font-body: var(--vyud-font-body), system-ui, sans-serif;
+  --font-mono: var(--vyud-font-mono), monospace;
+
+  --radius-vyud-sm: 4px;
+  --radius-vyud-md: 8px;
+  --radius-vyud-lg: 12px;
+  --radius-vyud-xl: 16px;
+}
 
 :root {
   /* ============================================
      VYUD DESIGN SYSTEM v2.0 TOKENS
   ============================================ */
 
-  /* Colors */
-  --vyud-primary-500: #0D7EFF;
-  --vyud-primary-600: #0062E0;
-  --vyud-neutral-0:   #FFFFFF;
-  --vyud-neutral-50:  #F7F9FC;
-  --vyud-neutral-100: #EEF2F7;
-  --vyud-neutral-200: #DDE4EF;
-  --vyud-neutral-900: #0D1926;
-  --vyud-neutral-950: #070E18;
-
-  /* Semantic aliases (Light theme by default, overridden for Dark below) */
-  --vyud-bg:              var(--vyud-neutral-950); /* We use dark by default for VYUD style */
-  --vyud-bg-secondary:    var(--vyud-neutral-900);
-  --vyud-text-primary:    var(--vyud-neutral-50);
-  --vyud-text-secondary:  var(--vyud-neutral-300);
-  --vyud-color-brand:     var(--vyud-primary-500);
-  --vyud-color-brand-hover: var(--vyud-primary-600);
-  --vyud-border:          rgba(255, 255, 255, 0.08);
+  /* Semantic aliases */
+  --vyud-bg: #070E18;
+  --vyud-bg-secondary: #0D1926;
+  --vyud-text-primary: #F7F9FC;
+  --vyud-text-secondary: #C4CFDF;
+  --vyud-color-brand: #0D7EFF;
+  --vyud-color-brand-hover: #0062E0;
+  --vyud-border: rgba(255, 255, 255, 0.08);
   
-  /* Typography */
-  --vyud-font-display: 'Syne', system-ui, sans-serif;
-  --vyud-font-body:    'DM Sans', system-ui, sans-serif;
-  --vyud-font-mono:    'JetBrains Mono', monospace;
-
-  /* Radius */
-  --vyud-radius-sm: 4px;
-  --vyud-radius-md: 8px;
-  --vyud-radius-lg: 12px;
-  --vyud-radius-xl: 16px;
-
   /* Motion */
   --vyud-duration-slow: 400ms;
   --vyud-ease-out: cubic-bezier(0, 0, 0.2, 1);
@@ -49,32 +61,57 @@
 body {
   color: var(--vyud-text-primary);
   background: var(--vyud-bg);
-  font-family: var(--vyud-font-body);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3, h4, h5, h6, .display-font {
-  font-family: var(--vyud-font-display);
-  font-weight: 700;
 }
 
 /* ============================================
    DESIGN SYSTEM COMPONENTS (v2.0)
 ============================================ */
 
-.vyud-btn-primary {
-  @apply bg-vyud-primary-500 text-white font-semibold py-3 px-8 rounded-vyud-md transition-all hover:bg-vyud-primary-600 active:scale-95;
-  box-shadow: 0 8px 24px rgba(13, 126, 255, 0.20);
+@layer components {
+  .vyud-btn-primary {
+    @apply bg-vyud-primary-500 text-white font-semibold py-3 px-8 rounded-vyud-md transition-all hover:bg-vyud-primary-600 active:scale-95;
+    box-shadow: 0 8px 24px rgba(13, 126, 255, 0.20);
+  }
+
+  .vyud-card {
+    @apply bg-vyud-neutral-900/50 border border-white/5 rounded-vyud-xl p-6 backdrop-blur-md transition-all hover:border-white/10;
+  }
+
+  .vyud-input {
+    @apply bg-white/5 border border-white/10 rounded-vyud-md px-4 py-3 text-white outline-none focus:border-vyud-primary-500 transition-colors;
+  }
+
+  .vyud-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
 }
 
-.vyud-card {
-  @apply bg-vyud-neutral-900/50 border border-white/5 rounded-vyud-xl p-6 backdrop-blur-md transition-all hover:border-white/10;
+/* Animations */
+@keyframes vyud-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.vyud-input {
-  @apply bg-white/5 border border-white/10 rounded-vyud-md px-4 py-3 text-white outline-none focus:border-vyud-primary-500 transition-colors;
+@keyframes vyud-shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
 }
 
-.vyud-badge {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+@keyframes vyud-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-vyud-fade-up {
+  animation: vyud-fade-up var(--vyud-duration-slow) var(--vyud-ease-out) both;
+}
+
+.animate-vyud-shimmer {
+  animation: vyud-shimmer 1.4s ease infinite;
+}
+
+.animate-vyud-spin {
+  animation: vyud-spin 0.65s linear infinite;
 }
