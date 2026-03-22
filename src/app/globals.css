@@ -3,12 +3,78 @@
 @tailwind utilities;
 
 :root {
-  --background: #030014;
-  --foreground: #ffffff;
+  /* ============================================
+     VYUD DESIGN SYSTEM v2.0 TOKENS
+  ============================================ */
+
+  /* Colors */
+  --vyud-primary-500: #0D7EFF;
+  --vyud-primary-600: #0062E0;
+  --vyud-neutral-0:   #FFFFFF;
+  --vyud-neutral-50:  #F7F9FC;
+  --vyud-neutral-100: #EEF2F7;
+  --vyud-neutral-200: #DDE4EF;
+  --vyud-neutral-900: #0D1926;
+  --vyud-neutral-950: #070E18;
+
+  /* Semantic aliases (Light theme by default, overridden for Dark below) */
+  --vyud-bg:              var(--vyud-neutral-950); /* We use dark by default for VYUD style */
+  --vyud-bg-secondary:    var(--vyud-neutral-900);
+  --vyud-text-primary:    var(--vyud-neutral-50);
+  --vyud-text-secondary:  var(--vyud-neutral-300);
+  --vyud-color-brand:     var(--vyud-primary-500);
+  --vyud-color-brand-hover: var(--vyud-primary-600);
+  --vyud-border:          rgba(255, 255, 255, 0.08);
+  
+  /* Typography */
+  --vyud-font-display: 'Syne', system-ui, sans-serif;
+  --vyud-font-body:    'DM Sans', system-ui, sans-serif;
+  --vyud-font-mono:    'JetBrains Mono', monospace;
+
+  /* Radius */
+  --vyud-radius-sm: 4px;
+  --vyud-radius-md: 8px;
+  --vyud-radius-lg: 12px;
+  --vyud-radius-xl: 16px;
+
+  /* Motion */
+  --vyud-duration-slow: 400ms;
+  --vyud-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Next.js theme vars */
+  --background: var(--vyud-bg);
+  --foreground: var(--vyud-text-primary);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--vyud-text-primary);
+  background: var(--vyud-bg);
+  font-family: var(--vyud-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .display-font {
+  font-family: var(--vyud-font-display);
+  font-weight: 700;
+}
+
+/* ============================================
+   DESIGN SYSTEM COMPONENTS (v2.0)
+============================================ */
+
+.vyud-btn-primary {
+  @apply bg-vyud-primary-500 text-white font-semibold py-3 px-8 rounded-vyud-md transition-all hover:bg-vyud-primary-600 active:scale-95;
+  box-shadow: 0 8px 24px rgba(13, 126, 255, 0.20);
+}
+
+.vyud-card {
+  @apply bg-vyud-neutral-900/50 border border-white/5 rounded-vyud-xl p-6 backdrop-blur-md transition-all hover:border-white/10;
+}
+
+.vyud-input {
+  @apply bg-white/5 border border-white/10 rounded-vyud-md px-4 py-3 text-white outline-none focus:border-vyud-primary-500 transition-colors;
+}
+
+.vyud-badge {
+  @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
 }
