@@ -10,41 +10,41 @@ export function Hero() {
       
       <div className="container mx-auto px-6 relative">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vyud-primary-500/10 border border-vyud-primary-500/20 text-vyud-primary-400 text-sm font-medium mb-8 animate-vyud-fade-up">
             <Zap className="w-4 h-4" />
             <span>AI-Native Sales Engagement</span>
           </div>
           
-          <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
-            Гипер-персонализация в аутриче <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">на автопилоте</span>
+          <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight font-display">
+            Гипер-персонализация в аутриче <span className="text-transparent bg-clip-text bg-gradient-to-r from-vyud-primary-400 to-vyud-primary-600">на автопилоте</span>
           </h1>
           
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed">
+          <p className="text-xl text-vyud-neutral-300 mb-10 max-w-2xl leading-relaxed">
             VYUD AI самостоятельно исследует ваших лидов, находит их CRM, вакансии и интересы, 
             чтобы написать письмо, на которое невозможно не ответить.
           </p>
           
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md animate-vyud-fade-up" style={{ animationDelay: '100ms' }}>
             <WaitlistForm />
           </div>
           
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left w-full max-w-5xl">
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all">
-              <Search className="w-10 h-10 text-purple-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Глубокий Research</h3>
-              <p className="text-gray-400 text-sm">AI заходит на сайт, читает "About Us" и вакансии, чтобы понять контекст бизнеса.</p>
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left w-full max-w-5xl animate-vyud-fade-up" style={{ animationDelay: '200ms' }}>
+            <div className="vyud-card border-l-4 border-l-vyud-primary-500">
+              <Search className="w-10 h-10 text-vyud-primary-400 mb-4" />
+              <h3 className="text-lg font-bold text-white mb-2 font-display">Глубокий Research</h3>
+              <p className="text-vyud-neutral-400 text-sm">AI заходит на сайт, читает "About Us" и вакансии, чтобы понять контекст бизнеса.</p>
             </div>
             
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all">
+            <div className="vyud-card border-l-4 border-l-blue-400">
               <Target className="w-10 h-10 text-blue-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">Умный Скоринг</h3>
-              <p className="text-gray-400 text-sm">Мы не гадаем. Наша система использует Chain of Thought для точной идентификации CRM и стека.</p>
+              <h3 className="text-lg font-bold text-white mb-2 font-display">Умный Скоринг</h3>
+              <p className="text-vyud-neutral-400 text-sm">Мы не гадаем. Наша система использует Chain of Thought для точной идентификации CRM и стека.</p>
             </div>
             
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all">
+            <div className="vyud-card border-l-4 border-l-yellow-400">
               <Zap className="w-10 h-10 text-yellow-400 mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">x100 к скорости</h3>
-              <p className="text-gray-400 text-sm">То, на что SDR тратит 20 минут, наш агент делает за 5 секунд. Масштабируйте качество.</p>
+              <h3 className="text-lg font-bold text-white mb-2 font-display">x100 к скорости</h3>
+              <p className="text-vyud-neutral-400 text-sm">То, на что SDR тратит 20 минут, наш агент делает за 5 секунд. Масштабируйте качество.</p>
             </div>
           </div>
         </div>

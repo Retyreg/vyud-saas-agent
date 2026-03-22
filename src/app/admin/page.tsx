@@ -79,61 +79,61 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030014] text-white p-8">
+    <div className="min-h-screen bg-vyud-neutral-950 text-white p-8">
       <div className="container mx-auto max-w-6xl">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 animate-vyud-fade-up">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <ShieldCheck className="w-6 h-6 text-purple-500" />
-              <h1 className="text-3xl font-bold">Admin Console</h1>
+              <ShieldCheck className="w-6 h-6 text-vyud-primary-500" />
+              <h1 className="text-3xl font-bold font-display tracking-tight text-white">Admin Console</h1>
             </div>
-            <p className="text-gray-400">Управление листом ожидания и доступом к бете</p>
+            <p className="text-vyud-neutral-400 font-body">Управление листом ожидания и доступом к бете</p>
           </div>
           
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl min-w-[120px]">
-              <span className="text-[10px] uppercase text-gray-500 block mb-1">Всего</span>
-              <span className="text-2xl font-bold">{stats.total}</span>
+            <div className="vyud-card p-4 min-w-[120px] flex flex-col justify-center">
+              <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-1">Всего</span>
+              <span className="text-2xl font-bold font-display">{stats.total}</span>
             </div>
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl min-w-[120px]">
-              <span className="text-[10px] uppercase text-gray-500 block mb-1">В очереди</span>
-              <span className="text-2xl font-bold text-yellow-500">{stats.pending}</span>
+            <div className="vyud-card p-4 min-w-[120px] flex flex-col justify-center border-l-2 border-l-yellow-500">
+              <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-1">В очереди</span>
+              <span className="text-2xl font-bold text-yellow-500 font-display">{stats.pending}</span>
             </div>
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl min-w-[120px]">
-              <span className="text-[10px] uppercase text-gray-500 block mb-1">Одобрено</span>
-              <span className="text-2xl font-bold text-green-500">{stats.invited}</span>
+            <div className="vyud-card p-4 min-w-[120px] flex flex-col justify-center border-l-2 border-l-green-500">
+              <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-1">Одобрено</span>
+              <span className="text-2xl font-bold text-green-500 font-display">{stats.invited}</span>
             </div>
           </div>
         </header>
 
         {/* Filters & Actions */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 mb-8 animate-vyud-fade-up" style={{ animationDelay: '100ms' }}>
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-vyud-neutral-500" />
             <input 
               type="text"
               placeholder="Поиск по email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-purple-500 transition-all"
+              className="vyud-input w-full pl-12"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 p-1 bg-white/5 rounded-xl border border-white/5">
             <button 
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === 'all' ? 'bg-purple-600 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+              className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filter === 'all' ? 'bg-vyud-primary-500 text-white shadow-lg shadow-vyud-primary-500/20' : 'text-vyud-neutral-400 hover:text-white'}`}
             >
               Все
             </button>
             <button 
               onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === 'pending' ? 'bg-yellow-600/20 text-yellow-500 border border-yellow-500/20' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+              className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filter === 'pending' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'text-vyud-neutral-400 hover:text-white'}`}
             >
               В очереди
             </button>
             <button 
               onClick={() => setFilter('invited')}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === 'invited' ? 'bg-green-600/20 text-green-500 border border-green-500/20' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+              className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filter === 'invited' ? 'bg-green-500 text-black shadow-lg shadow-green-500/20' : 'text-vyud-neutral-400 hover:text-white'}`}
             >
               Одобрено
             </button>
@@ -141,56 +141,56 @@ export default function AdminPanel() {
         </div>
 
         {/* Table */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+        <div className="vyud-card !p-0 overflow-hidden animate-vyud-fade-up shadow-2xl shadow-black" style={{ animationDelay: '200ms' }}>
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/5 border-b border-white/10">
-                <th className="p-6 text-sm font-semibold text-gray-400">Пользователь</th>
-                <th className="p-6 text-sm font-semibold text-gray-400">Статус</th>
-                <th className="p-6 text-sm font-semibold text-gray-400">Дата заявки</th>
-                <th className="p-6 text-sm font-semibold text-gray-400 text-right">Действия</th>
+              <tr className="bg-white/[0.03] border-b border-white/10">
+                <th className="p-6 text-[10px] uppercase tracking-widest font-bold text-vyud-neutral-500">Пользователь</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest font-bold text-vyud-neutral-500">Статус</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest font-bold text-vyud-neutral-500">Дата заявки</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest font-bold text-vyud-neutral-500 text-right">Действия</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
                   <td colSpan={4} className="p-20 text-center">
-                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-purple-500 mb-4" />
-                    <p className="text-gray-500">Загрузка данных...</p>
+                    <Loader2 className="w-8 h-8 animate-vyud-spin mx-auto text-vyud-primary-500 mb-4" />
+                    <p className="text-vyud-neutral-500 font-body">Загрузка данных...</p>
                   </td>
                 </tr>
               ) : filteredEntries.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-20 text-center text-gray-500">
+                  <td colSpan={4} className="p-20 text-center text-vyud-neutral-500 font-body">
                     Никого не нашли. Попробуйте изменить фильтры.
                   </td>
                 </tr>
               ) : filteredEntries.map((entry) => (
-                <tr key={entry.id} className="hover:bg-white/[0.02] transition-colors">
+                <tr key={entry.id} className="hover:bg-white/[0.01] transition-colors group">
                   <td className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center text-purple-400 font-bold">
+                      <div className="w-10 h-10 rounded-xl bg-vyud-primary-500/10 flex items-center justify-center text-vyud-primary-400 font-bold font-display border border-vyud-primary-500/10 group-hover:border-vyud-primary-500/30 transition-colors">
                         {entry.email[0].toUpperCase()}
                       </div>
-                      <span className="font-medium">{entry.email}</span>
+                      <span className="font-medium font-body">{entry.email}</span>
                     </div>
                   </td>
                   <td className="p-6">
                     {entry.status === 'pending' && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-medium border border-yellow-500/20">
+                      <span className="vyud-badge bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
                         <Clock className="w-3 h-3" /> В очереди
                       </span>
                     )}
                     {entry.status === 'invited' && (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-medium border border-green-500/20">
+                      <span className="vyud-badge bg-green-500/10 text-green-500 border border-green-500/20">
                         <CheckCircle className="w-3 h-3" /> Одобрен
                       </span>
                     )}
                   </td>
-                  <td className="p-6 text-sm text-gray-500">
+                  <td className="p-6 text-sm text-vyud-neutral-500 font-mono">
                     {new Date(entry.created_at).toLocaleDateString('ru-RU', {
                       day: 'numeric',
-                      month: 'long',
+                      month: 'short',
                       year: 'numeric'
                     })}
                   </td>
@@ -198,14 +198,14 @@ export default function AdminPanel() {
                     {entry.status === 'pending' ? (
                       <button 
                         onClick={() => updateStatus(entry.id, 'invited')}
-                        className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold py-2 px-4 rounded-lg transition-all"
+                        className="bg-vyud-primary-500 hover:bg-vyud-primary-600 text-white text-[10px] uppercase tracking-widest font-bold py-2 px-4 rounded-lg transition-all active:scale-95 shadow-lg shadow-vyud-primary-500/20"
                       >
                         Одобрить доступ
                       </button>
                     ) : (
                       <button 
                         onClick={() => updateStatus(entry.id, 'pending')}
-                        className="text-gray-500 hover:text-white text-xs font-medium py-2 px-4 transition-all"
+                        className="text-vyud-neutral-500 hover:text-white text-[10px] uppercase tracking-widest font-bold py-2 px-4 transition-all"
                       >
                         Вернуть в очередь
                       </button>

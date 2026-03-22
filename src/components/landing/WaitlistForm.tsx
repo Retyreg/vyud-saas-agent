@@ -55,12 +55,12 @@ export function WaitlistForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         disabled={status === 'loading'}
-        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-purple-500 transition-colors"
+        className="vyud-input flex-1"
       />
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold py-3 px-8 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+        className="vyud-btn-primary whitespace-nowrap flex items-center justify-center gap-2 disabled:opacity-50"
       >
         {status === 'loading' ? (
           <Loader2 className="w-5 h-5 animate-spin" />
