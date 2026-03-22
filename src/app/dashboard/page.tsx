@@ -73,11 +73,14 @@ export default function Dashboard() {
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i]
       try {
-        const response = await fetch('http://localhost:8000/api/analyze', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        const apiSecret = process.env.NEXT_PUBLIC_API_SECRET || 'vyud-secret-key-2026';
+
+        const response = await fetch(`${apiUrl}/api/analyze`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-API-Key': 'vyud-secret-key-2026' // Use the default key for now
+            'X-API-Key': apiSecret
           },
           body: JSON.stringify({ url })
         })
