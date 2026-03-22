@@ -49,6 +49,40 @@ export default function Dashboard() {
     checkUser()
   }, [router])
 
+  const [isSending, setIsSending] = useState<number | null>(null)
+
+  const sendEmail = async (index: number) => {
+    const res = results[index];
+    if (!res || res.status !== 'success') return;
+
+    setIsSending(index);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const apiSecret = process.env.NEXT_PUBLIC_API_SECRET || 'vyud-secret-key-2026';
+
+      const response = await fetch(`${apiUrl}/api/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiSecret
+        },
+        body: JSON.stringify({
+          to_email: 'test@example.com', // В будущем здесь будет email лида
+          subject: `VYUD AI Analysis for ${res.company_name}`,
+          body: res.email_draft
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to send');
+      alert('Письмо успешно отправлено!');
+    } catch (err) {
+      console.error('Error sending email:', err);
+      alert('Ошибка при отправке письма.');
+    } finally {
+      setIsSending(null);
+    }
+  }
+
   const startAnalysis = async () => {
     const urls = urlsInput.split('\n').map(u => u.trim()).filter(u => u !== '')
     if (urls.length === 0) return
@@ -273,7 +307,13 @@ export default function Dashboard() {
                             </p>
                           </div>
                           <div className="flex gap-2">
-                            <button className="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2.5 rounded-lg transition-all active:scale-95">Approve</button>
+                            <button 
+                              onClick={() => sendEmail(i)}
+                              disabled={isSending === i}
+                              className="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2.5 rounded-lg transition-all active:scale-95 disabled:opacity-50"
+                            >
+                              {isSending === i ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Approve & Send'}
+                            </button>
                             <button className="flex-1 bg-white/5 hover:bg-white/10 text-white text-xs font-bold py-2.5 rounded-lg border border-white/10 transition-all active:scale-95">Edit</button>
                             <button className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 active:scale-95">
                               <XCircle className="w-5 h-5" />
