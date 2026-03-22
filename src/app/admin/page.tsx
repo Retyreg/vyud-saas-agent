@@ -10,7 +10,8 @@ import {
   Clock, 
   ShieldCheck,
   Search,
-  Filter
+  Filter,
+  Loader2
 } from 'lucide-react'
 
 interface WaitlistEntry {
