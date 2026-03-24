@@ -47,6 +47,20 @@ export default function Dashboard() {
   const [progress, setProgress] = useState(0)
   const [user, setUser] = useState<any>(null)
   const [isSending, setIsSending] = useState<number | null>(null)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [tempDraft, setTempDraft] = useState('')
+
+  const startEditing = (index: number) => {
+    setEditingIndex(index)
+    setTempDraft(results[index].email_draft)
+  }
+
+  const saveEdit = (index: number) => {
+    const updatedResults = [...results]
+    updatedResults[index].email_draft = tempDraft
+    setResults(updatedResults)
+    setEditingIndex(null)
+  }
 
   useEffect(() => {
     const checkUser = async () => {
@@ -355,21 +369,44 @@ export default function Dashboard() {
                             </div>
                           )}
 
-                          <div className="relative flex-1 p-5 rounded-xl bg-vyud-primary-500/5 border border-vyud-primary-500/20">
+                          <div className="relative flex-1 p-5 rounded-xl bg-vyud-primary-500/5 border border-vyud-primary-500/20 min-h-[200px] flex flex-col">
                             <span className="text-[10px] uppercase tracking-widest text-vyud-primary-400 font-bold block mb-2 font-body">Personalized Email Draft</span>
-                            <p className="text-sm text-vyud-neutral-200 leading-relaxed whitespace-pre-wrap font-body italic">
-                              {res.email_draft}
-                            </p>
+                            {editingIndex === i ? (
+                              <textarea
+                                value={tempDraft}
+                                onChange={(e) => setTempDraft(e.target.value)}
+                                className="flex-1 w-full bg-transparent text-sm text-vyud-neutral-200 leading-relaxed outline-none border-none resize-none font-body italic"
+                                autoFocus
+                              />
+                            ) : (
+                              <p className="text-sm text-vyud-neutral-200 leading-relaxed whitespace-pre-wrap font-body italic">
+                                {res.email_draft}
+                              </p>
+                            )}
                           </div>
                           <div className="flex gap-2">
                             <button 
                               onClick={() => sendEmail(i)}
-                              disabled={isSending === i}
+                              disabled={isSending === i || editingIndex === i}
                               className="flex-1 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2.5 rounded-lg transition-all active:scale-95 disabled:opacity-50"
                             >
                               {isSending === i ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Approve & Send'}
                             </button>
-                            <button className="flex-1 bg-white/5 hover:bg-white/10 text-white text-xs font-bold py-2.5 rounded-lg border border-white/10 transition-all active:scale-95">Edit</button>
+                            {editingIndex === i ? (
+                              <button 
+                                onClick={() => saveEdit(i)}
+                                className="flex-1 bg-vyud-primary-500 hover:bg-vyud-primary-600 text-white text-xs font-bold py-2.5 rounded-lg transition-all active:scale-95"
+                              >
+                                Save Changes
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => startEditing(i)}
+                                className="flex-1 bg-white/5 hover:bg-white/10 text-white text-xs font-bold py-2.5 rounded-lg border border-white/10 transition-all active:scale-95"
+                              >
+                                Edit
+                              </button>
+                            )}
                             <button className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 active:scale-95">
                               <XCircle className="w-5 h-5" />
                             </button>
