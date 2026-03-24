@@ -21,6 +21,7 @@ interface DecisionMaker {
   name: string
   title: string
   linkedin_url: string
+  email?: string
   relevance_reason: string
 }
 
@@ -45,6 +46,7 @@ export default function Dashboard() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [user, setUser] = useState<any>(null)
+  const [isSending, setIsSending] = useState<number | null>(null)
 
   useEffect(() => {
     const checkUser = async () => {
@@ -58,11 +60,12 @@ export default function Dashboard() {
     checkUser()
   }, [router])
 
-  const [isSending, setIsSending] = useState<number | null>(null)
-
   const sendEmail = async (index: number) => {
     const res = results[index];
     if (!res || res.status !== 'success') return;
+
+    // Определяем email получателя: либо найденный, либо тестовый заглушка
+    const recipientEmail = res.decision_maker?.email || 'vatyutovd@gmail.com';
 
     setIsSending(index);
     try {
@@ -76,14 +79,14 @@ export default function Dashboard() {
           'X-API-Key': apiSecret
         },
         body: JSON.stringify({
-          to_email: 'test@example.com', // В будущем здесь будет email лида
+          to_email: recipientEmail,
           subject: `VYUD AI Analysis for ${res.company_name}`,
           body: res.email_draft
         })
       });
 
       if (!response.ok) throw new Error('Failed to send');
-      alert('Письмо успешно отправлено!');
+      alert(`Письмо успешно отправлено на ${recipientEmail}!`);
     } catch (err) {
       console.error('Error sending email:', err);
       alert('Ошибка при отправке письма.');
@@ -328,15 +331,23 @@ export default function Dashboard() {
                             <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
                               <span className="text-[10px] uppercase tracking-widest text-blue-400 font-bold block mb-2 font-body">Найденный ЛПР</span>
                               <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="text-sm font-bold text-white">{res.decision_maker.title}</p>
-                                  <p className="text-xs text-vyud-neutral-400">{res.decision_maker.relevance_reason}</p>
+                                <div className="flex-1">
+                                  <p className="text-sm font-bold text-white flex items-center gap-2">
+                                    {res.decision_maker.name}
+                                    {res.decision_maker.email && (
+                                      <span className="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 font-mono uppercase tracking-tighter">Email Verified</span>
+                                    )}
+                                  </p>
+                                  <p className="text-[11px] text-vyud-neutral-400 leading-tight mb-1">{res.decision_maker.title}</p>
+                                  {res.decision_maker.email && (
+                                    <p className="text-[11px] font-mono text-vyud-primary-400">{res.decision_maker.email}</p>
+                                  )}
                                 </div>
                                 <a 
                                   href={res.decision_maker.linkedin_url} 
                                   target="_blank" 
-                                  className="p-2 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] rounded-lg transition-colors"
-                                  title="Найти в LinkedIn"
+                                  className="p-2.5 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] rounded-xl transition-all border border-[#0077B5]/10"
+                                  title="Открыть в LinkedIn"
                                 >
                                   <ExternalLink className="w-4 h-4" />
                                 </a>
