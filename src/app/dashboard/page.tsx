@@ -49,6 +49,39 @@ export default function Dashboard() {
   const [isSending, setIsSending] = useState<number | null>(null)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [tempDraft, setTempDraft] = useState('')
+  const [accessStatus, setAccessStatus] = useState<'loading' | 'allowed' | 'denied'>('loading')
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        if (process.env.NODE_ENV === 'production') {
+          router.push('/login')
+        } else {
+          setUser({ email: 'dev@vyud.ai' })
+          setAccessStatus('allowed')
+        }
+        return
+      }
+
+      setUser(session.user)
+
+      // Проверяем статус в waitlist
+      const { data, error } = await supabase
+        .from('waitlist')
+        .select('status')
+        .eq('email', session.user.email)
+        .single()
+
+      if (data?.status === 'invited') {
+        setAccessStatus('allowed')
+      } else {
+        setAccessStatus('denied')
+      }
+    }
+    checkAccess()
+  }, [router])
 
   const startEditing = (index: number) => {
     setEditingIndex(index)
@@ -61,18 +94,6 @@ export default function Dashboard() {
     setResults(updatedResults)
     setEditingIndex(null)
   }
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session && process.env.NODE_ENV === 'production') {
-        router.push('/')
-      } else {
-        setUser(session?.user || { email: 'beta-tester@vyud.ai' })
-      }
-    }
-    checkUser()
-  }, [router])
 
   const sendEmail = async (index: number) => {
     const res = results[index];
@@ -111,6 +132,13 @@ export default function Dashboard() {
 
   const startAnalysis = async () => {
     const urls = urlsInput.split('\n').map(u => u.trim()).filter(u => u !== '')
+    
+    // Лимит №1: Не более 30 компаний за раз
+    if (urls.length > 30) {
+      alert('В бета-версии ограничение: не более 30 компаний за один запуск.')
+      return
+    }
+
     if (urls.length === 0) return
 
     setIsProcessing(true)
@@ -189,6 +217,27 @@ export default function Dashboard() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  if (accessStatus === 'loading') {
+    return (
+      <div className="min-h-screen bg-vyud-neutral-950 flex items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-vyud-spin text-vyud-primary-500" />
+      </div>
+    )
+  }
+
+  if (accessStatus === 'denied') {
+    return (
+      <div className="min-h-screen bg-vyud-neutral-950 text-white flex items-center justify-center p-6 text-center">
+        <div className="max-w-md vyud-card border-l-4 border-l-yellow-500">
+          <ShieldCheck className="w-16 h-16 text-yellow-500 mx-auto mb-6 opacity-50" />
+          <h1 className="text-2xl font-bold mb-4 font-display text-white tracking-tight">Доступ ограничен</h1>
+          <p className="text-vyud-neutral-400 mb-6 font-body">Ваш аккаунт находится в очереди. Мы отправим письмо, как только откроем доступ для вашей группы бета-тестеров.</p>
+          <button onClick={() => supabase.auth.signOut()} className="vyud-btn-primary w-full">Выйти из системы</button>
+        </div>
+      </div>
+    )
   }
 
   return (
