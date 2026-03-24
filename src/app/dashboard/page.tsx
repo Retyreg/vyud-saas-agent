@@ -17,6 +17,13 @@ import {
   Plus
 } from 'lucide-react'
 
+interface DecisionMaker {
+  name: string
+  title: string
+  linkedin_url: string
+  relevance_reason: string
+}
+
 interface AnalysisResult {
   url: string
   company_name: string
@@ -27,11 +34,13 @@ interface AnalysisResult {
   analysis_log: string
   email_draft: string
   status: 'pending' | 'success' | 'error'
+  decision_maker?: DecisionMaker
 }
 
 export default function Dashboard() {
   const router = useRouter()
   const [urlsInput, setUrlsInput] = useState('')
+  const [targetRole, setTargetRole] = useState('Head of Marketing')
   const [results, setResults] = useState<AnalysisResult[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -116,7 +125,10 @@ export default function Dashboard() {
             'Content-Type': 'application/json',
             'X-API-Key': apiSecret
           },
-          body: JSON.stringify({ url })
+          body: JSON.stringify({ 
+            url,
+            target_role: targetRole 
+          })
         })
 
         if (!response.ok) throw new Error('Failed to analyze')
@@ -189,6 +201,18 @@ export default function Dashboard() {
                 Новая кампания
               </h2>
               <p className="text-sm text-vyud-neutral-400 mb-4 font-body">Введите список доменов или URL страниц "About Us" для анализа.</p>
+              
+              <div className="mb-4">
+                <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Кого ищем? (Role)</label>
+                <input 
+                  type="text"
+                  value={targetRole}
+                  onChange={(e) => setTargetRole(e.target.value)}
+                  placeholder="напр. Head of HR"
+                  className="vyud-input w-full text-sm"
+                />
+              </div>
+
               <textarea
                 value={urlsInput}
                 onChange={(e) => setUrlsInput(e.target.value)}
@@ -300,6 +324,26 @@ export default function Dashboard() {
                         </div>
 
                         <div className="flex flex-col gap-4">
+                          {res.decision_maker && (
+                            <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                              <span className="text-[10px] uppercase tracking-widest text-blue-400 font-bold block mb-2 font-body">Найденный ЛПР</span>
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="text-sm font-bold text-white">{res.decision_maker.title}</p>
+                                  <p className="text-xs text-vyud-neutral-400">{res.decision_maker.relevance_reason}</p>
+                                </div>
+                                <a 
+                                  href={res.decision_maker.linkedin_url} 
+                                  target="_blank" 
+                                  className="p-2 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] rounded-lg transition-colors"
+                                  title="Найти в LinkedIn"
+                                >
+                                  <ExternalLink className="w-4 h-4" />
+                                </a>
+                              </div>
+                            </div>
+                          )}
+
                           <div className="relative flex-1 p-5 rounded-xl bg-vyud-primary-500/5 border border-vyud-primary-500/20">
                             <span className="text-[10px] uppercase tracking-widest text-vyud-primary-400 font-bold block mb-2 font-body">Personalized Email Draft</span>
                             <p className="text-sm text-vyud-neutral-200 leading-relaxed whitespace-pre-wrap font-body italic">
