@@ -14,7 +14,8 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  Plus
+  Plus,
+  ShieldCheck
 } from 'lucide-react'
 
 interface DecisionMaker {
@@ -151,7 +152,7 @@ export default function Dashboard() {
       company_name: '',
       industry: '',
       tech_stack: [],
-      crm_detected: '',
+      found_signals: [],
       confidence_score: 0,
       analysis_log: '',
       email_draft: '',
@@ -198,14 +199,14 @@ export default function Dashboard() {
   }
 
   const downloadCSV = () => {
-    const headers = ["URL", "Company", "Industry", "CRM", "Score", "Email"]
+    const headers = ["URL", "Company", "Industry", "Found Signals", "Score", "Email"]
     const rows = results
       .filter(r => r.status === 'success')
       .map(r => [
         r.url, 
         r.company_name, 
         r.industry, 
-        r.crm_detected, 
+        `"${(r.found_signals || []).join('; ')}"`, 
         r.confidence_score, 
         `"${r.email_draft.replace(/"/g, '""')}"`
       ])
