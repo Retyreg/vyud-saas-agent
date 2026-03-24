@@ -30,7 +30,7 @@ interface AnalysisResult {
   company_name: string
   industry: string
   tech_stack: string[]
-  crm_detected: string
+  found_signals: string[]
   confidence_score: number
   analysis_log: string
   email_draft: string
@@ -42,6 +42,7 @@ export default function Dashboard() {
   const router = useRouter()
   const [urlsInput, setUrlsInput] = useState('')
   const [targetRole, setTargetRole] = useState('Head of Marketing')
+  const [researchKeywords, setResearchKeywords] = useState('Found tools, CRM, AI mentions')
   const [results, setResults] = useState<AnalysisResult[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -172,7 +173,8 @@ export default function Dashboard() {
           },
           body: JSON.stringify({ 
             url,
-            target_role: targetRole 
+            target_role: targetRole,
+            research_keywords: researchKeywords
           })
         })
 
@@ -268,15 +270,27 @@ export default function Dashboard() {
               </h2>
               <p className="text-sm text-vyud-neutral-400 mb-4 font-body">Введите список доменов или URL страниц "About Us" для анализа.</p>
               
-              <div className="mb-4">
-                <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Кого ищем? (Role)</label>
-                <input 
-                  type="text"
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                  placeholder="напр. Head of HR"
-                  className="vyud-input w-full text-sm"
-                />
+              <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Кого ищем? (Role)</label>
+                  <input 
+                    type="text"
+                    value={targetRole}
+                    onChange={(e) => setTargetRole(e.target.value)}
+                    placeholder="напр. Head of HR"
+                    className="vyud-input w-full text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Фокус анализа (Keywords)</label>
+                  <input 
+                    type="text"
+                    value={researchKeywords}
+                    onChange={(e) => setResearchKeywords(e.target.value)}
+                    placeholder="напр. AI, Hiring plans, ATS"
+                    className="vyud-input w-full text-sm"
+                  />
+                </div>
               </div>
 
               <textarea
@@ -372,8 +386,18 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="p-4 rounded-xl bg-black/40 border border-white/5">
-                            <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Выявленная CRM</span>
-                            <span className="text-sm font-bold text-vyud-primary-400 font-display">{res.crm_detected || 'Не определено'}</span>
+                            <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Результаты по фокусам</span>
+                            <div className="flex flex-wrap gap-2">
+                              {res.found_signals && res.found_signals.length > 0 ? (
+                                res.found_signals.map((s, idx) => (
+                                  <span key={idx} className="text-sm font-bold text-vyud-primary-400 font-display italic">
+                                    {s}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="text-xs text-vyud-neutral-500 italic">Специфических сигналов не найдено</span>
+                              )}
+                            </div>
                           </div>
                           <div className="p-4 rounded-xl bg-black/40 border border-white/5">
                             <span className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Confidence Score</span>
