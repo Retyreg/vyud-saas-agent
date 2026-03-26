@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { Logo } from '@/components/ui/Logo'
 import { 
   Zap, 
   Search, 
@@ -259,8 +260,8 @@ export default function Dashboard() {
       <nav className="border-b border-white/5 bg-background/50 backdrop-blur-md p-4 sticky top-0 z-50">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-vyud-primary-500 rounded-lg flex items-center justify-center font-bold font-display">V</div>
-            <span className="text-xl font-bold tracking-tight font-display">VYUD <span className="text-vyud-primary-500">AI</span> <span className="text-[10px] bg-vyud-primary-500/20 text-vyud-primary-400 px-1.5 py-0.5 rounded border border-vyud-primary-500/30 ml-1 font-body">BETA</span></span>
+            <Logo size={32} />
+            <span className="text-[10px] bg-vyud-primary-500/20 text-vyud-primary-400 px-1.5 py-0.5 rounded border border-vyud-primary-500/30 ml-1 font-body">BETA</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-vyud-neutral-400">
             <span>{user?.email}</span>
