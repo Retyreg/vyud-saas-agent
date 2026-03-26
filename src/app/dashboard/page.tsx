@@ -36,6 +36,7 @@ interface AnalysisResult {
   analysis_log: string
   email_draft: string
   status: 'pending' | 'success' | 'error'
+  error_message?: string
   decision_maker?: DecisionMaker
 }
 
@@ -185,17 +186,20 @@ export default function Dashboard() {
           })
         })
 
-        if (!response.ok) throw new Error('Failed to analyze')
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.detail || 'Failed to analyze')
+        }
 
         const data = await response.json()
         
         setResults(prev => prev.map((item, idx) => 
           idx === i ? { ...data, url, status: 'success' as const } : item
         ))
-      } catch (err) {
+      } catch (err: any) {
         console.error(`Error analyzing ${url}:`, err)
         setResults(prev => prev.map((item, idx) => 
-          idx === i ? { ...item, status: 'error' as const } : item
+          idx === i ? { ...item, status: 'error' as const, error_message: err.message } : item
         ))
       }
       setProgress(((i + 1) / urls.length) * 100)
@@ -271,40 +275,39 @@ export default function Dashboard() {
           {/* Input Section */}
           <div className="lg:col-span-1 flex flex-col gap-6">
             <div className="vyud-card">
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-2 font-display">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2 font-display text-white">
                 <Plus className="w-5 h-5 text-vyud-primary-400" />
                 Новая кампания
               </h2>
-              <p className="text-sm text-vyud-neutral-400 mb-4 font-body">Введите список доменов или URL страниц "About Us" для анализа.</p>
               
-              <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4 mb-6">
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Кого ищем? (Role)</label>
+                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Кого ищем? (Target Role)</label>
                   <input 
                     type="text"
                     value={targetRole}
                     onChange={(e) => setTargetRole(e.target.value)}
-                    placeholder="напр. Head of HR"
-                    className="vyud-input w-full text-sm"
+                    placeholder="напр. Head of Marketing, CTO"
+                    className="vyud-input w-full text-sm py-3"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Фокус анализа (Keywords)</label>
-                  <input 
-                    type="text"
+                  <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Фокус анализа (Custom Keywords)</label>
+                  <textarea 
                     value={researchKeywords}
                     onChange={(e) => setResearchKeywords(e.target.value)}
-                    placeholder="напр. AI, Hiring plans, ATS"
-                    className="vyud-input w-full text-sm"
+                    placeholder="напр. Используемые CRM, планы найма, стек разработки"
+                    className="vyud-input w-full text-sm py-3 min-h-[80px] resize-none"
                   />
                 </div>
               </div>
 
+              <label className="text-[10px] uppercase tracking-widest text-vyud-neutral-500 font-bold block mb-2 font-body">Список URL (один в строке)</label>
               <textarea
                 value={urlsInput}
                 onChange={(e) => setUrlsInput(e.target.value)}
                 placeholder="https://example.com&#10;https://another-site.com/about"
-                className="w-full h-48 bg-black/40 border border-white/10 rounded-vyud-md p-4 text-sm outline-none focus:border-vyud-primary-500 transition-colors mb-4 resize-none font-mono"
+                className="w-full h-64 bg-black/40 border border-white/10 rounded-vyud-md p-4 text-sm outline-none focus:border-vyud-primary-500 transition-colors mb-4 resize-none font-mono"
               />
               <button
                 onClick={startAnalysis}
@@ -379,6 +382,12 @@ export default function Dashboard() {
                       </div>
                     </div>
 
+                    {res.status === 'error' && (
+                      <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/20 text-red-400 text-sm font-body">
+                        <strong>Ошибка:</strong> {res.error_message}
+                      </div>
+                    )}
+
                     {res.status === 'success' && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         <div className="space-y-4">
@@ -437,14 +446,16 @@ export default function Dashboard() {
                                     <p className="text-[11px] font-mono text-vyud-primary-400">{res.decision_maker.email}</p>
                                   )}
                                 </div>
-                                <a 
-                                  href={res.decision_maker.linkedin_url} 
-                                  target="_blank" 
-                                  className="p-2.5 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] rounded-xl transition-all border border-[#0077B5]/10"
-                                  title="Открыть в LinkedIn"
-                                >
-                                  <ExternalLink className="w-4 h-4" />
-                                </a>
+                                {res.decision_maker.linkedin_url && (
+                                  <a 
+                                    href={res.decision_maker.linkedin_url} 
+                                    target="_blank" 
+                                    className="p-2.5 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] rounded-xl transition-all border border-[#0077B5]/10"
+                                    title="Открыть в LinkedIn"
+                                  >
+                                    <ExternalLink className="w-4 h-4" />
+                                  </a>
+                                )}
                               </div>
                             </div>
                           )}
