@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { 
   Users, 
@@ -21,15 +22,30 @@ interface WaitlistEntry {
   created_at: string
 }
 
+const ADMIN_EMAIL = 'vatyutovd@gmail.com'
+
 export default function AdminPanel() {
+  const router = useRouter()
   const [entries, setEntries] = useState<WaitlistEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'pending' | 'invited'>('all')
+  const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
-    fetchEntries()
-  }, [])
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session || session.user.email !== ADMIN_EMAIL) {
+        router.push('/dashboard')
+        return
+      }
+
+      setIsAuthorized(true)
+      fetchEntries()
+    }
+    checkAdmin()
+  }, [router])
 
   const fetchEntries = async () => {
     setLoading(true)
@@ -76,6 +92,14 @@ export default function AdminPanel() {
     total: entries.length,
     pending: entries.filter(e => e.status === 'pending').length,
     invited: entries.filter(e => e.status === 'invited').length
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-vyud-neutral-950 flex items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-vyud-spin text-vyud-primary-500" />
+      </div>
+    )
   }
 
   return (
