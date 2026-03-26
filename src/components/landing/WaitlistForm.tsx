@@ -1,49 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 
 export function WaitlistForm() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading'>('idle')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
 
     setStatus('loading')
-
-    try {
-      const { error } = await supabase
-        .from('waitlist')
-        .insert([{ email, status: 'pending' }])
-
-      if (error) {
-        if (error.code === '23505') { // Duplicate key
-          setStatus('success')
-          setMessage('Вы уже в списке! Мы свяжемся с вами скоро.')
-        } else {
-          throw error
-        }
-      } else {
-        setStatus('success')
-        setMessage('Ура! Вы добавлены в лист ожидания. 🚀')
-      }
-    } catch (err: any) {
-      console.error('Waitlist error:', err)
-      setStatus('error')
-      setMessage('Что-то пошло не так. Попробуйте позже.')
-    }
-  }
-
-  if (status === 'success') {
-    return (
-      <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl text-center">
-        {message}
-      </div>
-    )
+    // Просто перенаправляем на страницу регистрации с предзаполненным email
+    router.push(`/register?email=${encodeURIComponent(email)}`)
   }
 
   return (
@@ -68,9 +40,6 @@ export function WaitlistForm() {
           'Присоединиться'
         )}
       </button>
-      {status === 'error' && (
-        <p className="absolute -bottom-6 left-0 text-red-400 text-xs">{message}</p>
-      )}
     </form>
   )
 }
