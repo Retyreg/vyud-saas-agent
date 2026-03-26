@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { Loader2, Zap, Shield } from 'lucide-react'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -85,6 +86,13 @@ export default function LoginPage() {
               {loading ? <Loader2 className="w-5 h-5 animate-vyud-spin" /> : 'Войти'}
             </button>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-vyud-neutral-500">
+              Нет аккаунта?{' '}
+              <Link href="/register" className="text-vyud-primary-400 hover:underline">Зарегистрироваться</Link>
+            </p>
+          </div>
         </div>
 
         <div className="mt-8 flex items-center justify-center gap-2 text-xs text-vyud-neutral-500 font-mono uppercase tracking-widest">
