@@ -34,8 +34,8 @@ function Footer() {
         </div>
         <p className="text-vyud-neutral-500 text-sm">© 2026 VYUD AI Engagement. Все права защищены.</p>
         <div className="flex gap-6">
-          <a href="#" className="text-vyud-neutral-500 hover:text-white transition-colors text-sm">Twitter</a>
-          <a href="#" className="text-vyud-neutral-500 hover:text-white transition-colors text-sm">LinkedIn</a>
+          <a href="https://t.me/VyudAi" target="_blank" rel="noopener noreferrer" className="text-vyud-neutral-500 hover:text-white transition-colors text-sm">Telegram</a>
+          <a href="https://www.linkedin.com/company/vyud-ai/" target="_blank" rel="noopener noreferrer" className="text-vyud-neutral-500 hover:text-white transition-colors text-sm">LinkedIn</a>
         </div>
       </div>
     </footer>
