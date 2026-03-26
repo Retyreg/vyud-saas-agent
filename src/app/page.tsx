@@ -1,4 +1,5 @@
 import { Hero } from '@/components/landing/Hero'
+import Link from 'next/link'
 
 function Navbar() {
   return (
@@ -15,9 +16,9 @@ function Navbar() {
           <a href="#" className="text-sm text-vyud-neutral-400 hover:text-white transition-colors">Бизнесу</a>
         </div>
         
-        <button className="bg-white/5 hover:bg-white/10 text-white px-5 py-2 rounded-full text-sm font-medium border border-white/10 transition-all">
+        <Link href="/register" className="bg-white/5 hover:bg-white/10 text-white px-5 py-2 rounded-full text-sm font-medium border border-white/10 transition-all">
           Beta Access
-        </button>
+        </Link>
       </div>
     </nav>
   )
