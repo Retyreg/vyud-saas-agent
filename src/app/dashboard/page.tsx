@@ -69,7 +69,13 @@ export default function Dashboard() {
 
       setUser(session.user)
 
-      // Проверяем статус в waitlist
+      // МАСТЕР-КЛЮЧ: Тебя пускаем всегда
+      if (session.user.email === 'vatyutovd@gmail.com') {
+        setAccessStatus('allowed')
+        return
+      }
+
+      // Проверяем статус в waitlist для остальных
       const { data, error } = await supabase
         .from('waitlist')
         .select('status')
